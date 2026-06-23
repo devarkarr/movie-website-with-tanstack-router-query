@@ -4,10 +4,10 @@ import { createRootRouteWithContext } from "@tanstack/react-router";
 
 import Notfound from "../features/errors/notfound";
 import RootLayout from "../components/layout/root-layout";
-import type { AuthContextType } from "../providers/auth-provider";
+import type { AuthState } from "../store/AuthStore";
 
 interface RouteContext {
-  auth: AuthContextType;
+  auth: AuthState;
 }
 
 export const Route = createRootRouteWithContext<RouteContext>()({

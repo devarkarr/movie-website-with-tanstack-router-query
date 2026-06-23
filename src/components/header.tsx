@@ -1,13 +1,15 @@
 /** @format */
 
-import { Link } from "@tanstack/react-router";
-import { useAuth } from "../providers/auth-provider";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useAuth } from "../store/AuthStore";
 
 const Header = () => {
   const { resetToken, token } = useAuth();
+  const navigate = useNavigate();
 
   const logout = () => {
     resetToken();
+    navigate({ to: "/sign-in", replace: true });
   };
 
   return (

@@ -1,6 +1,6 @@
 /** @format */
 
-import { useAuth } from "../../providers/auth-provider";
+import { useAuth } from "../../store/AuthStore";
 
 const Dashboard = () => {
   const auth = useAuth();
