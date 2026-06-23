@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as rootIndexRouteImport } from './routes/(root)/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -18,6 +19,10 @@ import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
 import { Route as rootMovieIdRouteImport } from './routes/(root)/movie/$id'
 import { Route as rootMovieCommentIdRouteImport } from './routes/(root)/movie/comment/$id'
 
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
   getParentRoute: () => rootRouteImport,
@@ -28,9 +33,9 @@ const rootIndexRoute = rootIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/_authenticated/dashboard',
+  id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const rootAboutRoute = rootAboutRouteImport.update({
   id: '/(root)/about',
@@ -59,26 +64,27 @@ const rootMovieCommentIdRoute = rootMovieCommentIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof rootIndexRoute
   '/sign-in': typeof authSignInRoute
   '/sign-up': typeof authSignUpRoute
   '/about': typeof rootAboutRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/': typeof rootIndexRoute
   '/movie/$id': typeof rootMovieIdRoute
   '/movie/comment/$id': typeof rootMovieCommentIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof rootIndexRoute
   '/sign-in': typeof authSignInRoute
   '/sign-up': typeof authSignUpRoute
   '/about': typeof rootAboutRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/': typeof rootIndexRoute
   '/movie/$id': typeof rootMovieIdRoute
   '/movie/comment/$id': typeof rootMovieCommentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(auth)': typeof authRouteRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/(auth)/sign-in': typeof authSignInRoute
   '/(auth)/sign-up': typeof authSignUpRoute
   '/(root)/about': typeof rootAboutRoute
@@ -90,25 +96,26 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/sign-in'
     | '/sign-up'
     | '/about'
     | '/dashboard'
-    | '/'
     | '/movie/$id'
     | '/movie/comment/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/sign-in'
     | '/sign-up'
     | '/about'
     | '/dashboard'
-    | '/'
     | '/movie/$id'
     | '/movie/comment/$id'
   id:
     | '__root__'
     | '/(auth)'
+    | '/_authenticated'
     | '/(auth)/sign-in'
     | '/(auth)/sign-up'
     | '/(root)/about'
@@ -120,8 +127,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   authRouteRoute: typeof authRouteRouteWithChildren
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   rootAboutRoute: typeof rootAboutRoute
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   rootIndexRoute: typeof rootIndexRoute
   rootMovieIdRoute: typeof rootMovieIdRoute
   rootMovieCommentIdRoute: typeof rootMovieCommentIdRoute
@@ -129,6 +136,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(auth)': {
       id: '/(auth)'
       path: ''
@@ -148,7 +162,7 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/(root)/about': {
       id: '/(root)/about'
@@ -202,10 +216,21 @@ const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
   authRouteRouteChildren,
 )
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   authRouteRoute: authRouteRouteWithChildren,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   rootAboutRoute: rootAboutRoute,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   rootIndexRoute: rootIndexRoute,
   rootMovieIdRoute: rootMovieIdRoute,
   rootMovieCommentIdRoute: rootMovieCommentIdRoute,

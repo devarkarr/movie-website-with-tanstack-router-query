@@ -1,15 +1,13 @@
 /** @format */
 
-import { Link, useNavigate } from "@tanstack/react-router";
-import Cookies from "js-cookie";
+import { Link } from "@tanstack/react-router";
+import { useAuth } from "../providers/auth-provider";
 
 const Header = () => {
-  const token = Cookies.get("token");
-  const navigate = useNavigate();
+  const { resetToken, token } = useAuth();
 
   const logout = () => {
-    Cookies.remove("token");
-    navigate({ to: "/sign-in", replace: true });
+    resetToken();
   };
 
   return (

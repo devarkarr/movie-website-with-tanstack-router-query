@@ -1,8 +1,7 @@
+/** @format */
 
 const SignUpPage = () => {
-  return (
-    <div>SignUpPage</div>
-  )
-}
+  return <div>SignUpPage</div>;
+};
 
-export default SignUpPage
+export default SignUpPage;
