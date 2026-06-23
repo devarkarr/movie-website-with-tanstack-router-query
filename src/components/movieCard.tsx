@@ -15,7 +15,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
       <img
         src={`${ImageBaseUrl}${movie.poster_path}`}
         alt={movie.title}
-        className="w-full h-auto"
+        className="w-full h-[400px]"
       />
       <div className="text-center">{movie.title}</div>
       <p>{movie.release_date}</p>

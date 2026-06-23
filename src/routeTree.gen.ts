@@ -9,86 +9,206 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as MovieIdRouteImport } from './routes/movie/$id'
+import { Route as authRouteRouteImport } from './routes/(auth)/route'
+import { Route as rootIndexRouteImport } from './routes/(root)/index'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as rootAboutRouteImport } from './routes/(root)/about'
+import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
+import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
+import { Route as rootMovieIdRouteImport } from './routes/(root)/movie/$id'
+import { Route as rootMovieCommentIdRouteImport } from './routes/(root)/movie/comment/$id'
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const authRouteRoute = authRouteRouteImport.update({
+  id: '/(auth)',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const rootIndexRoute = rootIndexRouteImport.update({
+  id: '/(root)/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MovieIdRoute = MovieIdRouteImport.update({
-  id: '/movie/$id',
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/_authenticated/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const rootAboutRoute = rootAboutRouteImport.update({
+  id: '/(root)/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authSignUpRoute = authSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authSignInRoute = authSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const rootMovieIdRoute = rootMovieIdRouteImport.update({
+  id: '/(root)/movie/$id',
   path: '/movie/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const rootMovieCommentIdRoute = rootMovieCommentIdRouteImport.update({
+  id: '/(root)/movie/comment/$id',
+  path: '/movie/comment/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/movie/$id': typeof MovieIdRoute
+  '/sign-in': typeof authSignInRoute
+  '/sign-up': typeof authSignUpRoute
+  '/about': typeof rootAboutRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/': typeof rootIndexRoute
+  '/movie/$id': typeof rootMovieIdRoute
+  '/movie/comment/$id': typeof rootMovieCommentIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/movie/$id': typeof MovieIdRoute
+  '/sign-in': typeof authSignInRoute
+  '/sign-up': typeof authSignUpRoute
+  '/about': typeof rootAboutRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/': typeof rootIndexRoute
+  '/movie/$id': typeof rootMovieIdRoute
+  '/movie/comment/$id': typeof rootMovieCommentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/movie/$id': typeof MovieIdRoute
+  '/(auth)': typeof authRouteRouteWithChildren
+  '/(auth)/sign-in': typeof authSignInRoute
+  '/(auth)/sign-up': typeof authSignUpRoute
+  '/(root)/about': typeof rootAboutRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/(root)/': typeof rootIndexRoute
+  '/(root)/movie/$id': typeof rootMovieIdRoute
+  '/(root)/movie/comment/$id': typeof rootMovieCommentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/movie/$id'
+  fullPaths:
+    | '/sign-in'
+    | '/sign-up'
+    | '/about'
+    | '/dashboard'
+    | '/'
+    | '/movie/$id'
+    | '/movie/comment/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/movie/$id'
-  id: '__root__' | '/' | '/about' | '/movie/$id'
+  to:
+    | '/sign-in'
+    | '/sign-up'
+    | '/about'
+    | '/dashboard'
+    | '/'
+    | '/movie/$id'
+    | '/movie/comment/$id'
+  id:
+    | '__root__'
+    | '/(auth)'
+    | '/(auth)/sign-in'
+    | '/(auth)/sign-up'
+    | '/(root)/about'
+    | '/_authenticated/dashboard'
+    | '/(root)/'
+    | '/(root)/movie/$id'
+    | '/(root)/movie/comment/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  MovieIdRoute: typeof MovieIdRoute
+  authRouteRoute: typeof authRouteRouteWithChildren
+  rootAboutRoute: typeof rootAboutRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  rootIndexRoute: typeof rootIndexRoute
+  rootMovieIdRoute: typeof rootMovieIdRoute
+  rootMovieCommentIdRoute: typeof rootMovieCommentIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/(auth)': {
+      id: '/(auth)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/(root)/': {
+      id: '/(root)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof rootIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/movie/$id': {
-      id: '/movie/$id'
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(root)/about': {
+      id: '/(root)/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof rootAboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/sign-up': {
+      id: '/(auth)/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof authSignUpRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/sign-in': {
+      id: '/(auth)/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof authSignInRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(root)/movie/$id': {
+      id: '/(root)/movie/$id'
       path: '/movie/$id'
       fullPath: '/movie/$id'
-      preLoaderRoute: typeof MovieIdRouteImport
+      preLoaderRoute: typeof rootMovieIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(root)/movie/comment/$id': {
+      id: '/(root)/movie/comment/$id'
+      path: '/movie/comment/$id'
+      fullPath: '/movie/comment/$id'
+      preLoaderRoute: typeof rootMovieCommentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
+interface authRouteRouteChildren {
+  authSignInRoute: typeof authSignInRoute
+  authSignUpRoute: typeof authSignUpRoute
+}
+
+const authRouteRouteChildren: authRouteRouteChildren = {
+  authSignInRoute: authSignInRoute,
+  authSignUpRoute: authSignUpRoute,
+}
+
+const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
+  authRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  MovieIdRoute: MovieIdRoute,
+  authRouteRoute: authRouteRouteWithChildren,
+  rootAboutRoute: rootAboutRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  rootIndexRoute: rootIndexRoute,
+  rootMovieIdRoute: rootMovieIdRoute,
+  rootMovieCommentIdRoute: rootMovieCommentIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
