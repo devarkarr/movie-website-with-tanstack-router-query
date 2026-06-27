@@ -13,6 +13,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as rootIndexRouteImport } from './routes/(root)/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as rootMemoRouteImport } from './routes/(root)/memo'
 import { Route as rootHooksRouteImport } from './routes/(root)/hooks'
 import { Route as rootAboutRouteImport } from './routes/(root)/about'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
@@ -37,6 +38,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const rootMemoRoute = rootMemoRouteImport.update({
+  id: '/(root)/memo',
+  path: '/memo',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const rootHooksRoute = rootHooksRouteImport.update({
   id: '/(root)/hooks',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof authSignUpRoute
   '/about': typeof rootAboutRoute
   '/hooks': typeof rootHooksRoute
+  '/memo': typeof rootMemoRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/movie/$id': typeof rootMovieIdRoute
   '/movie/comment/$id': typeof rootMovieCommentIdRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof authSignUpRoute
   '/about': typeof rootAboutRoute
   '/hooks': typeof rootHooksRoute
+  '/memo': typeof rootMemoRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/movie/$id': typeof rootMovieIdRoute
   '/movie/comment/$id': typeof rootMovieCommentIdRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/(auth)/sign-up': typeof authSignUpRoute
   '/(root)/about': typeof rootAboutRoute
   '/(root)/hooks': typeof rootHooksRoute
+  '/(root)/memo': typeof rootMemoRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/(root)/': typeof rootIndexRoute
   '/(root)/movie/$id': typeof rootMovieIdRoute
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/about'
     | '/hooks'
+    | '/memo'
     | '/dashboard'
     | '/movie/$id'
     | '/movie/comment/$id'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/about'
     | '/hooks'
+    | '/memo'
     | '/dashboard'
     | '/movie/$id'
     | '/movie/comment/$id'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/(auth)/sign-up'
     | '/(root)/about'
     | '/(root)/hooks'
+    | '/(root)/memo'
     | '/_authenticated/dashboard'
     | '/(root)/'
     | '/(root)/movie/$id'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   rootAboutRoute: typeof rootAboutRoute
   rootHooksRoute: typeof rootHooksRoute
+  rootMemoRoute: typeof rootMemoRoute
   rootIndexRoute: typeof rootIndexRoute
   rootMovieIdRoute: typeof rootMovieIdRoute
   rootMovieCommentIdRoute: typeof rootMovieCommentIdRoute
@@ -176,6 +189,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/(root)/memo': {
+      id: '/(root)/memo'
+      path: '/memo'
+      fullPath: '/memo'
+      preLoaderRoute: typeof rootMemoRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(root)/hooks': {
       id: '/(root)/hooks'
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   rootAboutRoute: rootAboutRoute,
   rootHooksRoute: rootHooksRoute,
+  rootMemoRoute: rootMemoRoute,
   rootIndexRoute: rootIndexRoute,
   rootMovieIdRoute: rootMovieIdRoute,
   rootMovieCommentIdRoute: rootMovieCommentIdRoute,
