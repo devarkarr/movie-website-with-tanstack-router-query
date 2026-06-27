@@ -1,14 +1,18 @@
 /** @format */
 
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../store/AuthStore";
+import { useAuth } from "../providers/auth-provider";
 
 const Header = () => {
-  const { resetToken, token } = useAuth();
+  const { dispatch, state } = useAuth();
   const navigate = useNavigate();
 
   const logout = () => {
-    resetToken();
+    dispatch({
+      type: "RESET_TOKEN",
+      payload: null,
+    });
+
     navigate({ to: "/sign-in", replace: true });
   };
 
@@ -18,13 +22,13 @@ const Header = () => {
         Home
       </Link>
 
-      {!token && (
+      {!state.token && (
         <Link to="/sign-in" className="[&.active]:font-bold">
           Sign in
         </Link>
       )}
 
-      {token && (
+      {state.token && (
         <button className="bg-red-500 text-white py-2 px-4" onClick={logout}>
           Logout
         </button>

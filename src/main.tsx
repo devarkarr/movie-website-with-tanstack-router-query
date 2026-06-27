@@ -8,7 +8,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuth } from "./store/AuthStore";
+import AuthProvider, { useAuth } from "./providers/auth-provider";
 
 // Create a new router instance
 const router = createRouter({
@@ -27,6 +27,7 @@ declare module "@tanstack/react-router" {
 
 const queryClient = new QueryClient();
 
+// eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
   const auth = useAuth();
   return (
@@ -46,7 +47,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </QueryClientProvider>
     </StrictMode>
   );

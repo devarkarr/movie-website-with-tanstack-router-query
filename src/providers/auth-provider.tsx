@@ -1,58 +1,66 @@
 /** @format */
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useReducer } from "react";
 import Cookies from "js-cookie";
-import { useNavigate } from "@tanstack/react-router";
 
 export type AuthContextType = {
   token: string | null;
-  setToken: (token: string) => void;
-  resetToken: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export type AuthContextActionType = {
+  type: "SET_TOKEN" | "RESET_TOKEN";
+  payload: string | null;
+};
 
+const AuthContext = createContext<
+  | {
+      state: AuthContextType;
+      dispatch: React.Dispatch<AuthContextActionType>;
+    }
+  | undefined
+>(undefined);
+
+// actions
+function authReducer(state: AuthContextType, action: AuthContextActionType) {
+  switch (action.type) {
+    case "SET_TOKEN":
+      Cookies.set("token", action.payload ?? "", { expires: 7 });
+      return { ...state, token: action.payload };
+
+    case "RESET_TOKEN":
+      Cookies.remove("token");
+      return { ...state, token: null };
+
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+}
+
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [state, dispatch] = useReducer(authReducer, {
+    token: Cookies.get("token") ?? null,
+  });
+
+  return (
+    <AuthContext.Provider
+      value={{
+        state,
+        dispatch,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// custom 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
-
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  //
-  const [token, _setToken] = useState<string | null>(
-    () => Cookies.get("token") || null
-  );
-
-  const navigate = useNavigate();
-
-  //
-  const setToken = (token: string) => {
-    Cookies.set("token", token, { expires: 7 });
-    _setToken(token);
-    navigate({ to: "/dashboard", replace: true });
-  };
-
-  //
-  const resetToken = () => {
-    Cookies.remove("token");
-    _setToken(null);
-    navigate({ to: "/sign-in", replace: true });
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        token,
-        setToken,
-        resetToken,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
 };
 
 export default AuthProvider;

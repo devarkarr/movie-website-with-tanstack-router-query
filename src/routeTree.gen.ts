@@ -13,6 +13,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as rootIndexRouteImport } from './routes/(root)/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as rootHooksRouteImport } from './routes/(root)/hooks'
 import { Route as rootAboutRouteImport } from './routes/(root)/about'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
@@ -36,6 +37,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const rootHooksRoute = rootHooksRouteImport.update({
+  id: '/(root)/hooks',
+  path: '/hooks',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const rootAboutRoute = rootAboutRouteImport.update({
   id: '/(root)/about',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof authSignInRoute
   '/sign-up': typeof authSignUpRoute
   '/about': typeof rootAboutRoute
+  '/hooks': typeof rootHooksRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/movie/$id': typeof rootMovieIdRoute
   '/movie/comment/$id': typeof rootMovieCommentIdRoute
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/sign-in': typeof authSignInRoute
   '/sign-up': typeof authSignUpRoute
   '/about': typeof rootAboutRoute
+  '/hooks': typeof rootHooksRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/movie/$id': typeof rootMovieIdRoute
   '/movie/comment/$id': typeof rootMovieCommentIdRoute
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/(auth)/sign-in': typeof authSignInRoute
   '/(auth)/sign-up': typeof authSignUpRoute
   '/(root)/about': typeof rootAboutRoute
+  '/(root)/hooks': typeof rootHooksRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/(root)/': typeof rootIndexRoute
   '/(root)/movie/$id': typeof rootMovieIdRoute
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/about'
+    | '/hooks'
     | '/dashboard'
     | '/movie/$id'
     | '/movie/comment/$id'
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/about'
+    | '/hooks'
     | '/dashboard'
     | '/movie/$id'
     | '/movie/comment/$id'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/(auth)/sign-in'
     | '/(auth)/sign-up'
     | '/(root)/about'
+    | '/(root)/hooks'
     | '/_authenticated/dashboard'
     | '/(root)/'
     | '/(root)/movie/$id'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   authRouteRoute: typeof authRouteRouteWithChildren
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   rootAboutRoute: typeof rootAboutRoute
+  rootHooksRoute: typeof rootHooksRoute
   rootIndexRoute: typeof rootIndexRoute
   rootMovieIdRoute: typeof rootMovieIdRoute
   rootMovieCommentIdRoute: typeof rootMovieCommentIdRoute
@@ -163,6 +176,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/(root)/hooks': {
+      id: '/(root)/hooks'
+      path: '/hooks'
+      fullPath: '/hooks'
+      preLoaderRoute: typeof rootHooksRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(root)/about': {
       id: '/(root)/about'
@@ -231,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   authRouteRoute: authRouteRouteWithChildren,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   rootAboutRoute: rootAboutRoute,
+  rootHooksRoute: rootHooksRoute,
   rootIndexRoute: rootIndexRoute,
   rootMovieIdRoute: rootMovieIdRoute,
   rootMovieCommentIdRoute: rootMovieCommentIdRoute,
